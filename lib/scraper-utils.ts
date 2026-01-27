@@ -106,6 +106,7 @@ export interface Scrape {
     location: string;
     keyword: string;
     maxResults: number;
+    listName?: string;
     status: "pending" | "running" | "completed" | "failed";
     progress: number;
     leadsFound: number;
@@ -118,12 +119,22 @@ export interface Scrape {
     error: string | null;
 }
 
-export function createScrape(location: string, keyword: string, maxResults: number): Scrape {
+export interface LeadList {
+    id: string;
+    name: string;
+    scrapeIds: string[];
+    totalLeads: number;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export function createScrape(location: string, keyword: string, maxResults: number, listName?: string): Scrape {
     return {
         id: `scrape_${Date.now()}`,
         location,
         keyword,
         maxResults,
+        listName,
         status: "pending",
         progress: 0,
         leadsFound: 0,
@@ -139,6 +150,7 @@ export function createScrape(location: string, keyword: string, maxResults: numb
 
 // LocalStorage helpers
 const SCRAPES_KEY = "lumflow_scrapes";
+const LEAD_LISTS_KEY = "lumflow_lead_lists";
 
 export function getSavedScrapes(): Scrape[] {
     if (typeof window === "undefined") return [];
@@ -166,6 +178,78 @@ export function deleteScrape(id: string): void {
     if (typeof window === "undefined") return;
     const scrapes = getSavedScrapes().filter((s) => s.id !== id);
     localStorage.setItem(SCRAPES_KEY, JSON.stringify(scrapes));
+}
+
+// Lead List Management
+export function getSavedLeadLists(): LeadList[] {
+    if (typeof window === "undefined") return [];
+    const saved = localStorage.getItem(LEAD_LISTS_KEY);
+    return saved ? JSON.parse(saved) : [];
+}
+
+export function getLeadListByName(name: string): LeadList | null {
+    const lists = getSavedLeadLists();
+    return lists.find((list) => list.name === name) || null;
+}
+
+export function saveLeadList(listName: string, scrapeId: string): void {
+    if (typeof window === "undefined") return;
+    const lists = getSavedLeadLists();
+    const existingList = lists.find((list) => list.name === listName);
+
+    if (existingList) {
+        // Update existing list
+        existingList.scrapeIds.push(scrapeId);
+        existingList.updatedAt = new Date().toISOString();
+
+        // Calculate total leads from all scrapes
+        const scrapes = getSavedScrapes();
+        const listScrapes = scrapes.filter((s) => existingList.scrapeIds.includes(s.id));
+        existingList.totalLeads = listScrapes.reduce((sum, s) => sum + s.leadsFound, 0);
+    } else {
+        // Create new list
+        const newList: LeadList = {
+            id: `list_${Date.now()}`,
+            name: listName,
+            scrapeIds: [scrapeId],
+            totalLeads: 0,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+        };
+        lists.push(newList);
+    }
+
+    localStorage.setItem(LEAD_LISTS_KEY, JSON.stringify(lists));
+}
+
+export function updateLeadListTotalLeads(listName: string): void {
+    if (typeof window === "undefined") return;
+    const lists = getSavedLeadLists();
+    const list = lists.find((l) => l.name === listName);
+
+    if (list) {
+        const scrapes = getSavedScrapes();
+        const listScrapes = scrapes.filter((s) => list.scrapeIds.includes(s.id));
+        list.totalLeads = listScrapes.reduce((sum, s) => sum + s.leadsFound, 0);
+        localStorage.setItem(LEAD_LISTS_KEY, JSON.stringify(lists));
+    }
+}
+
+export function deleteLeadList(listName: string): void {
+    if (typeof window === "undefined") return;
+    const lists = getSavedLeadLists().filter((list) => list.name !== listName);
+    localStorage.setItem(LEAD_LISTS_KEY, JSON.stringify(lists));
+}
+
+export function getLeadsByListName(listName: string): Lead[] {
+    const list = getLeadListByName(listName);
+    if (!list) return [];
+
+    const scrapes = getSavedScrapes();
+    const listScrapes = scrapes.filter((s) => list.scrapeIds.includes(s.id));
+
+    // Combine all leads from all scrapes in this list
+    return listScrapes.flatMap((scrape) => scrape.results);
 }
 
 // CSV Export
