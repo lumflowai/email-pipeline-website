@@ -116,7 +116,7 @@ export function AddDomainModal({ open, onOpenChange, onDomainAdded }: AddDomainM
                             <DialogHeader>
                                 <DialogTitle className="text-white">Connect New Domain</DialogTitle>
                                 <DialogDescription className="text-slate-400">
-                                    Enter the domain you'll use to send emails
+                                    Enter the domain you will use to send emails
                                 </DialogDescription>
                             </DialogHeader>
 
@@ -201,7 +201,7 @@ export function AddDomainModal({ open, onOpenChange, onDomainAdded }: AddDomainM
                                                     <li>Log in to your Cloudflare account</li>
                                                     <li>Select your domain</li>
                                                     <li>Go to DNS → Records</li>
-                                                    <li>Click "Add record" and paste the values above</li>
+                                                    <li>Click <b>Add record</b> and paste the values above</li>
                                                 </ol>
                                             </div>
                                             <div>
@@ -223,7 +223,7 @@ export function AddDomainModal({ open, onOpenChange, onDomainAdded }: AddDomainM
                                     Back
                                 </Button>
                                 <Button onClick={handleVerify} className="bg-purple-600 hover:bg-purple-700">
-                                    I've Added the Records
+                                    I have Added the Records
                                 </Button>
                             </DialogFooter>
                         </motion.div>

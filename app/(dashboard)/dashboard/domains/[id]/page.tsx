@@ -39,12 +39,15 @@ export default function DomainDetailsPage() {
     const [warmupSpeed, setWarmupSpeed] = useState('moderate');
 
     useEffect(() => {
-        const foundDomain = getMockDomainById(domainId);
-        if (foundDomain) {
-            setDomain(foundDomain);
-            setDailyLimit([foundDomain.dailyLimit]);
-            setActivity(generateMockActivity(domainId));
-        }
+        const timer = setTimeout(() => {
+            const foundDomain = getMockDomainById(domainId);
+            if (foundDomain) {
+                setDomain(foundDomain);
+                setDailyLimit([foundDomain.dailyLimit]);
+                setActivity(generateMockActivity(domainId));
+            }
+        }, 0);
+        return () => clearTimeout(timer);
     }, [domainId]);
 
     if (!domain) {

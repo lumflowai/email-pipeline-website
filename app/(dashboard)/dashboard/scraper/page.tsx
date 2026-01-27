@@ -121,17 +121,21 @@ export default function ScraperPage() {
     const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
     // Load past scrapes and lead lists on mount
+    // Load past scrapes and lead lists on mount
     useEffect(() => {
-        setPastScrapes(getSavedScrapes());
-        setExistingLeadLists(getSavedLeadLists());
+        const timer = setTimeout(() => {
+            setPastScrapes(getSavedScrapes());
+            setExistingLeadLists(getSavedLeadLists());
 
-        // Check rate limiting
-        const lastHourScrapes = getSavedScrapes().filter((s) => {
-            const createdAt = new Date(s.createdAt);
-            const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
-            return createdAt > oneHourAgo;
-        });
-        setScrapesThisHour(lastHourScrapes.length);
+            // Check rate limiting
+            const lastHourScrapes = getSavedScrapes().filter((s) => {
+                const createdAt = new Date(s.createdAt);
+                const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+                return createdAt > oneHourAgo;
+            });
+            setScrapesThisHour(lastHourScrapes.length);
+        }, 0);
+        return () => clearTimeout(timer);
     }, []);
 
     // Estimated time based on results
@@ -377,7 +381,7 @@ export default function ScraperPage() {
         });
 
         return filtered;
-    }, [currentScrape?.results, searchQuery, filterType, sortColumn, sortDirection]);
+    }, [currentScrape, searchQuery, filterType, sortColumn, sortDirection]);
 
     const filteredLeads = getFilteredLeads();
     const totalPages = Math.ceil(filteredLeads.length / leadsPerPage);
@@ -924,7 +928,7 @@ export default function ScraperPage() {
                                                             Found {currentScrape.leadsFound.toLocaleString()} leads in {currentScrape.location}
                                                             {currentScrape.listName && (
                                                                 <span className="ml-1">
-                                                                    • Saved to <span className="font-medium text-purple-400">{currentScrape.listName}</span>
+                                                                    &bull; Saved to <span className="font-medium text-purple-400">{currentScrape.listName}</span>
                                                                 </span>
                                                             )}
                                                         </p>

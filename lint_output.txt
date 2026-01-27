@@ -1,0 +1,198 @@
+
+> lumflow-ai@0.1.0 lint
+> eslint
+
+
+D:\Website for Email Automation Plus more\app\(auth)\login\page.tsx
+  18:11  warning  'router' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\Website for Email Automation Plus more\app\(auth)\signup\page.tsx
+  18:11  warning  'router' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\Website for Email Automation Plus more\app\(dashboard)\dashboard\billing\page.tsx
+  12:5  warning  'CreditCard' is defined but never used  @typescript-eslint/no-unused-vars
+  15:5  warning  'ArrowRight' is defined but never used  @typescript-eslint/no-unused-vars
+  20:5  warning  'Zap' is defined but never used         @typescript-eslint/no-unused-vars
+
+D:\Website for Email Automation Plus more\app\(dashboard)\dashboard\campaigns\[id]\page.tsx
+  6:62  warning  'CheckCircle2' is defined but never used  @typescript-eslint/no-unused-vars
+  6:76  warning  'Circle' is defined but never used        @typescript-eslint/no-unused-vars
+
+D:\Website for Email Automation Plus more\app\(dashboard)\dashboard\campaigns\new\page.tsx
+   29:5   warning  'Clock' is defined but never used                 @typescript-eslint/no-unused-vars
+   32:10  warning  'cn' is defined but never used                    @typescript-eslint/no-unused-vars
+  119:15  warning  'newCampaign' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\Website for Email Automation Plus more\app\(dashboard)\dashboard\domains\[id]\page.tsx
+   8:10  warning  'Progress' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-unused-vars
+  30:11  warning  'router' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+  44:13  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\Website for Email Automation Plus more\app\(dashboard)\dashboard\domains\[id]\page.tsx:44:13
+  42 |         const foundDomain = getMockDomainById(domainId);
+  43 |         if (foundDomain) {
+> 44 |             setDomain(foundDomain);
+     |             ^^^^^^^^^ Avoid calling setState() directly within an effect
+  45 |             setDailyLimit([foundDomain.dailyLimit]);
+  46 |             setActivity(generateMockActivity(domainId));
+  47 |         }  react-hooks/set-state-in-effect
+
+D:\Website for Email Automation Plus more\app\(dashboard)\dashboard\domains\page.tsx
+  95:27  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+D:\Website for Email Automation Plus more\app\(dashboard)\dashboard\email\page.tsx
+  36:5  warning  'Check' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  37:5  warning  'Clock' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  38:5  warning  'AlertCircle' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+  67:9  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\Website for Email Automation Plus more\app\(dashboard)\dashboard\email\page.tsx:67:9
+  65 |     // Load data
+  66 |     useEffect(() => {
+> 67 |         setLeadLists(getLeadLists());
+     |         ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  68 |         setCampaigns(getCampaigns());
+  69 |         setReplies(getReplies());
+  70 |  react-hooks/set-state-in-effect
+
+D:\Website for Email Automation Plus more\app\(dashboard)\dashboard\page.tsx
+  11:5  warning  'Phone' is defined but never used      @typescript-eslint/no-unused-vars
+  14:5  warning  'PhoneCall' is defined but never used  @typescript-eslint/no-unused-vars
+  17:5  warning  'Clock' is defined but never used      @typescript-eslint/no-unused-vars
+
+D:\Website for Email Automation Plus more\app\(dashboard)\dashboard\scraper\page.tsx
+   10:10  warning  'Progress' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+   25:5   warning  'businessNames' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   36:5   warning  'Loader2' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+   39:5   warning  'Phone' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-unused-vars
+   40:5   warning  'Mail' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+   47:5   warning  'MoreHorizontal' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+   51:5   warning  'Filter' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               @typescript-eslint/no-unused-vars
+  125:9   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\Website for Email Automation Plus more\app\(dashboard)\dashboard\scraper\page.tsx:125:9
+  123 |     // Load past scrapes and lead lists on mount
+  124 |     useEffect(() => {
+> 125 |         setPastScrapes(getSavedScrapes());
+      |         ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  126 |         setExistingLeadLists(getSavedLeadLists());
+  127 |
+  128 |         // Check rate limiting                                                                                                                                                                                                                                                              react-hooks/set-state-in-effect
+  321:42  warning  'type' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+  333:42  error    Compilation Skipped: Existing memoization could not be preserved
+
+React Compiler has skipped optimizing this component because the existing manual memoization could not be preserved. The inferred dependencies did not match the manually specified dependencies, which could cause the value to change more or less frequently than expected. The inferred dependency was `currentScrape`, but the source dependencies were [currentScrape?.results, searchQuery, filterType, sortColumn, sortDirection]. Inferred less specific property than source.
+
+D:\Website for Email Automation Plus more\app\(dashboard)\dashboard\scraper\page.tsx:333:42
+  331 |
+  332 |     // Filter and sort leads
+> 333 |     const getFilteredLeads = useCallback(() => {
+      |                                          ^^^^^^^
+> 334 |         if (!currentScrape?.results) return [];
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 335 |
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 379 |         return filtered;
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 380 |     }, [currentScrape?.results, searchQuery, filterType, sortColumn, sortDirection]);
+      | ^^^^^^ Could not preserve existing manual memoization
+  381 |
+  382 |     const filteredLeads = getFilteredLeads();
+  383 |     const totalPages = Math.ceil(filteredLeads.length / leadsPerPage);  react-hooks/preserve-manual-memoization
+
+D:\Website for Email Automation Plus more\app\(dashboard)\dashboard\settings\page.tsx
+  18:5  warning  'X' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\Website for Email Automation Plus more\components\campaigns\CampaignStatusBadge.tsx
+  3:15  warning  'Campaign' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\Website for Email Automation Plus more\components\campaigns\EmailEditor.tsx
+  117:61  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+D:\Website for Email Automation Plus more\components\campaigns\StepIndicator.tsx
+  12:46  warning  'totalSteps' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\Website for Email Automation Plus more\components\domains\AddDomainModal.tsx
+   43:12  warning  'isVerifying' is assigned a value but never used                 @typescript-eslint/no-unused-vars
+  119:57  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  204:63  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  204:74  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  226:38  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+D:\Website for Email Automation Plus more\components\domains\DNSRecordsTable.tsx
+  36:18  warning  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\Website for Email Automation Plus more\components\marketing\faq.tsx
+  6:10  warning  'ChevronDown' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\Website for Email Automation Plus more\components\marketing\features.tsx
+  10:5  warning  'Mic' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\Website for Email Automation Plus more\components\marketing\how-it-works.tsx
+  4:29  warning  'useTransform' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\Website for Email Automation Plus more\components\marketing\navbar.tsx
+  3:20  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\Website for Email Automation Plus more\components\ui\confetti.tsx
+  24:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\Website for Email Automation Plus more\components\ui\confetti.tsx:24:9
+  22 |             rotation: Math.random() * 360,
+  23 |         }));
+> 24 |         setParticles(newParticles);
+     |         ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  25 |
+  26 |         const timer = setTimeout(() => {
+  27 |             setParticles([]);  react-hooks/set-state-in-effect
+
+D:\Website for Email Automation Plus more\components\ui\slider.tsx
+  39:9  warning  'handlePointerUp' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\Website for Email Automation Plus more\components\ui\text-scramble.tsx
+  19:5  warning  'speed' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+D:\Website for Email Automation Plus more\lib\campaigns\mock-data.ts
+  1:25  warning  'CampaignStatus' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\Website for Email Automation Plus more\lib\domains\dns-generator.ts
+  6:36  warning  'domain' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\Website for Email Automation Plus more\lib\domains\mock-data.ts
+   75:44  warning  'domain' is defined but never used    @typescript-eslint/no-unused-vars
+  102:38  warning  'domainId' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\Website for Email Automation Plus more\lib\scraper-utils.ts
+  41:11  warning  'domain' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  80:63  warning  'keyword' is defined but never used          @typescript-eslint/no-unused-vars
+
+D:\Website for Email Automation Plus more\utils\supabase\middleware.ts
+  18:58  warning  'options' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 55 problems (11 errors, 44 warnings)
+

@@ -10,18 +10,18 @@ interface ConfettiProps {
 export function Confetti({ duration = 1500 }: ConfettiProps) {
     const [particles, setParticles] = useState<
         { id: number; x: number; color: string; delay: number; rotation: number }[]
-    >([]);
-
-    useEffect(() => {
+    >(() => {
         const colors = ["#8B5CF6", "#3B82F6", "#06B6D4", "#10B981", "#F59E0B"];
-        const newParticles = Array.from({ length: 50 }, (_, i) => ({
+        return Array.from({ length: 50 }, (_, i) => ({
             id: i,
             x: Math.random() * 100,
             color: colors[Math.floor(Math.random() * colors.length)],
             delay: Math.random() * 0.3,
             rotation: Math.random() * 360,
         }));
-        setParticles(newParticles);
+    });
+
+    useEffect(() => {
 
         const timer = setTimeout(() => {
             setParticles([]);

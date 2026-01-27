@@ -63,14 +63,18 @@ export default function EmailPage() {
     const [selectedReply, setSelectedReply] = useState<EmailReply | null>(null);
 
     // Load data
+    // Load data
     useEffect(() => {
-        setLeadLists(getLeadLists());
-        setCampaigns(getCampaigns());
-        setReplies(getReplies());
+        const timer = setTimeout(() => {
+            setLeadLists(getLeadLists());
+            setCampaigns(getCampaigns());
+            setReplies(getReplies());
 
-        // Check if "connected" (mock)
-        const connected = localStorage.getItem("instantly_connected") === "true";
-        setIsInstantlyConnected(connected);
+            // Check if "connected" (mock)
+            const connected = localStorage.getItem("instantly_connected") === "true";
+            setIsInstantlyConnected(connected);
+        }, 0);
+        return () => clearTimeout(timer);
     }, []);
 
     // Get selected lead list details

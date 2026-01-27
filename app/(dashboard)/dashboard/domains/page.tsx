@@ -92,7 +92,7 @@ export default function DomainsPage() {
                     </h2>
                     <p className="text-slate-400 mb-8 text-center max-w-md">
                         Connect your first email domain to start sending campaigns.
-                        We'll guide you through the setup process.
+                        We will guide you through the setup process.
                     </p>
                     <Button
                         onClick={() => setIsAddModalOpen(true)}

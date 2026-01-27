@@ -114,7 +114,7 @@ export function EmailEditor({
                                 ))}
                             </div>
                             <p className="text-xs text-muted-foreground mt-3">
-                                Click to insert tokens. They'll be replaced with actual data when sent.
+                                Click to insert tokens. They will be replaced with actual data when sent.
                             </p>
                         </CardContent>
                     </Card>
