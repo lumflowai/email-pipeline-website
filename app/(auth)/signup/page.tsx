@@ -16,17 +16,22 @@ export default function SignupPage() {
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
-    const { login } = useAuth();
+    const { signup } = useAuth();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
 
-        // Mock signup - no validation needed
-        setTimeout(() => {
-            login(email || "user@example.com");
-            router.push("/dashboard");
-        }, 500);
+        try {
+            await signup(email, password);
+            setIsLoading(false);
+            alert("Account created! Logging you in...");
+            // Optional: Redirect or refresh dealt with by useAuth
+        } catch (error) {
+            console.error(error);
+            alert("Signup failed. Please try again.");
+            setIsLoading(false);
+        }
     };
 
     return (

@@ -1,38 +1,92 @@
 "use client";
 
-// Mock auth utility for testing
-// In production, this would be replaced with a real auth solution
+import { createClient } from "@/lib/supabase/client";
+import { User } from "@supabase/supabase-js";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function useAuth() {
-    const isLoggedIn = typeof window !== "undefined" && localStorage.getItem("lumflow_auth") === "true";
+    const [user, setUser] = useState<User | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const router = useRouter();
+    const supabase = createClient();
 
-    const login = (email: string) => {
-        if (typeof window !== "undefined") {
-            localStorage.setItem("lumflow_auth", "true");
-            localStorage.setItem("lumflow_user_email", email);
+    useEffect(() => {
+        const {
+            data: { subscription },
+        } = supabase.auth.onAuthStateChange((event, session) => {
+            setUser(session?.user ?? null);
+            setIsLoading(false);
+            if (event === 'SIGNED_IN') {
+                router.refresh();
+            }
+            if (event === 'SIGNED_OUT') {
+                router.refresh();
+                router.push("/");
+            }
+        });
+
+        // Initial check
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            setUser(session?.user ?? null);
+            setIsLoading(false);
+        });
+
+        return () => subscription.unsubscribe();
+    }, [router, supabase]);
+
+    const login = async (email: string, password?: string) => {
+        if (password) {
+            const { error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
+            if (error) throw error;
+        } else {
+            const { error } = await supabase.auth.signInWithOtp({
+                email,
+                options: {
+                    emailRedirectTo: `${window.location.origin}/auth/callback`,
+                },
+            });
+            if (error) throw error;
         }
     };
 
-    const logout = () => {
-        if (typeof window !== "undefined") {
-            localStorage.removeItem("lumflow_auth");
-            localStorage.removeItem("lumflow_user_email");
+    const signup = async (email: string, password?: string) => {
+        if (password) {
+            const { error } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    emailRedirectTo: `${window.location.origin}/auth/callback`,
+                },
+            });
+            if (error) throw error;
+        } else {
+            // Fallback to magic link signup/login
+            await login(email);
         }
+    };
+
+    const logout = async () => {
+        await supabase.auth.signOut();
+        router.refresh();
+        router.replace("/");
     };
 
     const getUserEmail = () => {
-        if (typeof window !== "undefined") {
-            return localStorage.getItem("lumflow_user_email") || "user@example.com";
-        }
-        return "user@example.com";
+        return user?.email || "";
     };
 
-    return { isLoggedIn, login, logout, getUserEmail };
+    return {
+        user,
+        isLoggedIn: !!user,
+        isLoading,
+        login,
+        signup,
+        logout,
+        getUserEmail
+    };
 }
 
-export function checkAuth(): boolean {
-    if (typeof window !== "undefined") {
-        return localStorage.getItem("lumflow_auth") === "true";
-    }
-    return false;
-}

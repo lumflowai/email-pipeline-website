@@ -207,13 +207,13 @@ export default function DashboardPage() {
                     </Link>
 
                     {/* Email Campaign */}
-                    <Link href="/dashboard/email">
+                    <Link href="/dashboard/campaigns/new">
                         <Button className="h-auto w-full flex-col items-start gap-3 bg-gradient-to-r from-blue-600 to-cyan-600 p-6 text-left hover:scale-[1.02] transition-transform">
                             <Mail className="h-6 w-6" />
                             <div>
-                                <p className="font-semibold">Launch Email Campaign</p>
+                                <p className="font-semibold">Create New Campaign</p>
                                 <p className="text-sm text-white/70">
-                                    Send personalized cold emails
+                                    Launch automated email outreach
                                 </p>
                             </div>
                             <ArrowRight className="h-4 w-4" />

@@ -52,8 +52,22 @@ import {
     ArrowUpDown,
     CheckCircle2,
     XCircle,
+    Lightbulb,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 // Activity feed item for live updates
 interface ActivityItem {
@@ -417,7 +431,7 @@ export default function ScraperPage() {
                         transition={{ delay: 0.1 }}
                         className="sticky top-8"
                     >
-                        <SpotlightCard className="p-6">
+                        <SpotlightCard className="p-6" fadeIn={true} delay={0.1}>
                             {/* Header */}
                             <div className="mb-6">
                                 <h2 className="text-lg font-semibold text-white">
@@ -459,7 +473,7 @@ export default function ScraperPage() {
                                                 if (errors.location) setErrors((prev) => ({ ...prev, location: undefined }));
                                             }}
                                             className={cn(
-                                                "border-white/10 bg-white/5 pl-10 text-white placeholder:text-slate-500",
+                                                "border-white/10 bg-card border-white/5 pl-10 text-white placeholder:text-slate-500",
                                                 errors.location && "border-red-500"
                                             )}
                                             disabled={isRunning}
@@ -490,7 +504,7 @@ export default function ScraperPage() {
                                                 if (errors.keyword) setErrors((prev) => ({ ...prev, keyword: undefined }));
                                             }}
                                             className={cn(
-                                                "border-white/10 bg-white/5 pl-10 text-white placeholder:text-slate-500",
+                                                "border-white/10 bg-card border-white/5 pl-10 text-white placeholder:text-slate-500",
                                                 errors.keyword && "border-red-500"
                                             )}
                                             disabled={isRunning}
@@ -523,7 +537,7 @@ export default function ScraperPage() {
                                                 "flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                                                 isNewList
                                                     ? "bg-purple-500/20 text-purple-300 border border-purple-500/50"
-                                                    : "bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10"
+                                                    : "bg-card border-white/5 text-slate-400 border border-white/10 hover:bg-white/10"
                                             )}
                                             disabled={isRunning}
                                         >
@@ -536,7 +550,7 @@ export default function ScraperPage() {
                                                 "flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                                                 !isNewList
                                                     ? "bg-purple-500/20 text-purple-300 border border-purple-500/50"
-                                                    : "bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10"
+                                                    : "bg-card border-white/5 text-slate-400 border border-white/10 hover:bg-white/10"
                                             )}
                                             disabled={isRunning || existingLeadLists.length === 0}
                                         >
@@ -554,31 +568,34 @@ export default function ScraperPage() {
                                                 if (errors.leadListName) setErrors((prev) => ({ ...prev, leadListName: undefined }));
                                             }}
                                             className={cn(
-                                                "border-white/10 bg-white/5 text-white placeholder:text-slate-500",
+                                                "border-white/10 bg-card border-white/5 text-white placeholder:text-slate-500",
                                                 errors.leadListName && "border-red-500"
                                             )}
                                             disabled={isRunning}
                                         />
                                     ) : (
-                                        <select
+                                        <Select
                                             value={leadListName}
-                                            onChange={(e) => {
-                                                setLeadListName(e.target.value);
+                                            onValueChange={(value: string) => {
+                                                setLeadListName(value);
                                                 if (errors.leadListName) setErrors((prev) => ({ ...prev, leadListName: undefined }));
                                             }}
-                                            className={cn(
-                                                "w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white",
-                                                errors.leadListName && "border-red-500"
-                                            )}
                                             disabled={isRunning}
                                         >
-                                            <option value="">Select a list...</option>
-                                            {existingLeadLists.map((list) => (
-                                                <option key={list.id} value={list.name}>
-                                                    {list.name} ({list.totalLeads} leads)
-                                                </option>
-                                            ))}
-                                        </select>
+                                            <SelectTrigger className={cn(
+                                                "w-full bg-card border-white/5 border-white/10 text-white",
+                                                errors.leadListName && "border-red-500"
+                                            )}>
+                                                <SelectValue placeholder="Select a list..." />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {existingLeadLists.map((list) => (
+                                                    <SelectItem key={list.id} value={list.name}>
+                                                        {list.name} ({list.totalLeads} leads)
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
                                     )}
 
                                     {errors.leadListName ? (
@@ -597,9 +614,14 @@ export default function ScraperPage() {
                                 <div className="space-y-4">
                                     <div className="flex items-center justify-between">
                                         <Label className="text-slate-300">Number of Leads</Label>
-                                        <span className="text-2xl font-bold text-white">
+                                        <motion.span
+                                            key={maxResults[0]}
+                                            initial={{ scale: 1.1 }}
+                                            animate={{ scale: 1 }}
+                                            className="text-2xl font-bold text-white number-update"
+                                        >
                                             {maxResults[0].toLocaleString()}
-                                        </span>
+                                        </motion.span>
                                     </div>
                                     <Slider
                                         value={maxResults}
@@ -608,6 +630,8 @@ export default function ScraperPage() {
                                         max={10000}
                                         step={10}
                                         disabled={isRunning}
+                                        showTooltip={true}
+                                        tooltipLabel={(val) => `${val.toLocaleString()} leads`}
                                         className="[&>span:first-child]:bg-slate-700 [&>span:first-child>span]:bg-gradient-to-r [&>span:first-child>span]:from-purple-500 [&>span:first-child>span]:to-blue-500"
                                     />
                                     <div className="flex justify-between text-xs text-slate-500">
@@ -618,92 +642,86 @@ export default function ScraperPage() {
 
                                 {/* Advanced Options */}
                                 <div className="border-t border-white/5 pt-4">
-                                    <button
-                                        className="flex w-full items-center justify-between text-sm text-slate-400 hover:text-white"
-                                        onClick={() => setShowAdvanced(!showAdvanced)}
+                                    <Collapsible
+                                        open={showAdvanced}
+                                        onOpenChange={setShowAdvanced}
+                                        className="space-y-2"
                                     >
-                                        <span>Advanced Filters</span>
-                                        {showAdvanced ? (
-                                            <ChevronUp className="h-4 w-4" />
-                                        ) : (
-                                            <ChevronDown className="h-4 w-4" />
-                                        )}
-                                    </button>
-
-                                    <AnimatePresence>
-                                        {showAdvanced && (
-                                            <motion.div
-                                                initial={{ height: 0, opacity: 0 }}
-                                                animate={{ height: "auto", opacity: 1 }}
-                                                exit={{ height: 0, opacity: 0 }}
-                                                transition={{ duration: 0.2 }}
-                                                className="overflow-hidden"
+                                        <CollapsibleTrigger asChild>
+                                            <button
+                                                className="flex w-full items-center justify-between text-sm text-slate-400 hover:text-white"
                                             >
-                                                <div className="mt-4 space-y-4">
-                                                    {/* Min Rating */}
-                                                    <div className="space-y-2">
-                                                        <div className="flex items-center justify-between">
-                                                            <Label className="text-slate-400 text-sm">Minimum Rating</Label>
-                                                            <span className="text-sm text-white">{minRating[0].toFixed(1)} ⭐</span>
-                                                        </div>
-                                                        <Slider
-                                                            value={minRating}
-                                                            onValueChange={setMinRating}
-                                                            min={1}
-                                                            max={5}
-                                                            step={0.5}
-                                                            disabled={isRunning}
-                                                            className="[&>span:first-child]:bg-slate-700"
-                                                        />
-                                                    </div>
-
-                                                    {/* Min Reviews */}
-                                                    <div className="space-y-2">
-                                                        <Label className="text-slate-400 text-sm">Minimum Reviews</Label>
-                                                        <Input
-                                                            type="number"
-                                                            placeholder="e.g., 10"
-                                                            value={minReviews}
-                                                            onChange={(e) => setMinReviews(e.target.value)}
-                                                            className="border-white/10 bg-white/5 text-white placeholder:text-slate-500"
-                                                            disabled={isRunning}
-                                                        />
-                                                    </div>
-
-                                                    {/* Include Checkboxes */}
-                                                    <div className="space-y-2">
-                                                        <Label className="text-slate-400 text-sm">Include</Label>
-                                                        <div className="flex flex-wrap gap-4">
-                                                            <label className="flex items-center gap-2 text-sm text-slate-300">
-                                                                <Checkbox
-                                                                    checked={includePhones}
-                                                                    onCheckedChange={(c) => setIncludePhones(!!c)}
-                                                                    disabled={isRunning}
-                                                                />
-                                                                Phone numbers
-                                                            </label>
-                                                            <label className="flex items-center gap-2 text-sm text-slate-300">
-                                                                <Checkbox
-                                                                    checked={includeEmails}
-                                                                    onCheckedChange={(c) => setIncludeEmails(!!c)}
-                                                                    disabled={isRunning}
-                                                                />
-                                                                Email addresses
-                                                            </label>
-                                                            <label className="flex items-center gap-2 text-sm text-slate-300">
-                                                                <Checkbox
-                                                                    checked={includeWebsites}
-                                                                    onCheckedChange={(c) => setIncludeWebsites(!!c)}
-                                                                    disabled={isRunning}
-                                                                />
-                                                                Websites
-                                                            </label>
-                                                        </div>
-                                                    </div>
+                                                <span>Advanced Filters</span>
+                                                {showAdvanced ? (
+                                                    <ChevronUp className="h-4 w-4" />
+                                                ) : (
+                                                    <ChevronDown className="h-4 w-4" />
+                                                )}
+                                            </button>
+                                        </CollapsibleTrigger>
+                                        <CollapsibleContent className="space-y-4 pt-4">
+                                            {/* Min Rating */}
+                                            <div className="space-y-2">
+                                                <div className="flex items-center justify-between">
+                                                    <Label className="text-slate-400 text-sm">Minimum Rating</Label>
+                                                    <span className="text-sm text-white">{minRating[0].toFixed(1)} ⭐</span>
                                                 </div>
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
+                                                <Slider
+                                                    value={minRating}
+                                                    onValueChange={setMinRating}
+                                                    min={1}
+                                                    max={5}
+                                                    step={0.5}
+                                                    disabled={isRunning}
+                                                    className="[&>span:first-child]:bg-slate-700"
+                                                />
+                                            </div>
+
+                                            {/* Min Reviews */}
+                                            <div className="space-y-2">
+                                                <Label className="text-slate-400 text-sm">Minimum Reviews</Label>
+                                                <Input
+                                                    type="number"
+                                                    placeholder="e.g., 10"
+                                                    value={minReviews}
+                                                    onChange={(e) => setMinReviews(e.target.value)}
+                                                    className="border-white/10 bg-card border-white/5 text-white placeholder:text-slate-500"
+                                                    disabled={isRunning}
+                                                />
+                                            </div>
+
+                                            {/* Include Checkboxes */}
+                                            <div className="space-y-2">
+                                                <Label className="text-slate-400 text-sm">Include</Label>
+                                                <div className="flex flex-wrap gap-4">
+                                                    <label className="flex items-center gap-2 text-sm text-slate-300">
+                                                        <Checkbox
+                                                            checked={includePhones}
+                                                            onCheckedChange={(c) => setIncludePhones(!!c)}
+                                                            disabled={isRunning}
+                                                        />
+                                                        Phone numbers
+                                                    </label>
+                                                    <label className="flex items-center gap-2 text-sm text-slate-300">
+                                                        <Checkbox
+                                                            checked={includeEmails}
+                                                            onCheckedChange={(c) => setIncludeEmails(!!c)}
+                                                            disabled={isRunning}
+                                                        />
+                                                        Email addresses
+                                                    </label>
+                                                    <label className="flex items-center gap-2 text-sm text-slate-300">
+                                                        <Checkbox
+                                                            checked={includeWebsites}
+                                                            onCheckedChange={(c) => setIncludeWebsites(!!c)}
+                                                            disabled={isRunning}
+                                                        />
+                                                        Websites
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </CollapsibleContent>
+                                    </Collapsible>
                                 </div>
 
                                 {/* Action Button */}
@@ -732,21 +750,23 @@ export default function ScraperPage() {
                             </div>
 
                             {/* Info Box */}
-                            <div className="mt-6 flex items-start gap-3 rounded-xl bg-purple-500/10 p-4">
-                                <Info className="h-5 w-5 shrink-0 text-purple-400" />
-                                <p className="text-sm text-purple-300">
-                                    💡 Tip: More leads = more time. We recommend starting with 100-500 leads.
-                                </p>
-                            </div>
+                            <Alert className="mt-6 border-purple-500/20 bg-purple-500/10 text-purple-300">
+                                <Lightbulb className="h-4 w-4 text-purple-400" />
+                                <AlertTitle className="text-purple-400">Pro Tip</AlertTitle>
+                                <AlertDescription>
+                                    More leads = more time. We recommend starting with 100-500 leads for faster results.
+                                </AlertDescription>
+                            </Alert>
 
                             {/* Rate Limit Warning */}
                             {scrapesThisHour >= maxScrapesPerHour - 2 && (
-                                <div className="mt-4 flex items-start gap-3 rounded-xl bg-yellow-500/10 p-4">
-                                    <AlertCircle className="h-5 w-5 shrink-0 text-yellow-400" />
-                                    <p className="text-sm text-yellow-300">
+                                <Alert variant="destructive" className="mt-4 border-yellow-500/50 bg-yellow-500/10 text-yellow-300">
+                                    <AlertCircle className="h-4 w-4 text-yellow-400" />
+                                    <AlertTitle className="text-yellow-400">Rate Limit Warning</AlertTitle>
+                                    <AlertDescription>
                                         You can run {maxScrapesPerHour - scrapesThisHour} more scrape{maxScrapesPerHour - scrapesThisHour !== 1 ? "s" : ""} this hour.
-                                    </p>
-                                </div>
+                                    </AlertDescription>
+                                </Alert>
                             )}
                         </SpotlightCard>
                     </motion.div>
@@ -883,7 +903,18 @@ export default function ScraperPage() {
                                                 <div className="flex items-start justify-between">
                                                     <div>
                                                         <div className="flex items-center gap-2">
-                                                            <CheckCircle2 className="h-5 w-5 text-green-400" />
+                                                            <motion.div
+                                                                initial={{ scale: 0 }}
+                                                                animate={{ scale: 1 }}
+                                                                transition={{
+                                                                    type: "spring",
+                                                                    stiffness: 260,
+                                                                    damping: 20,
+                                                                    delay: 0.1,
+                                                                }}
+                                                            >
+                                                                <CheckCircle2 className="h-5 w-5 text-green-400" />
+                                                            </motion.div>
                                                             <span className="text-sm font-medium text-green-400">Completed</span>
                                                         </div>
                                                         <h3 className="mt-2 text-2xl font-bold text-white">
@@ -934,7 +965,7 @@ export default function ScraperPage() {
                                                     <Button
                                                         variant="ghost"
                                                         onClick={handleNewScrape}
-                                                        className="border border-white/10 text-slate-300 hover:bg-white/5"
+                                                        className="border border-white/10 text-slate-300 hover:bg-card border-white/5"
                                                     >
                                                         <RefreshCw className="mr-2 h-4 w-4" />
                                                         Start New Scrape
@@ -956,13 +987,13 @@ export default function ScraperPage() {
                                                                 placeholder="Search leads..."
                                                                 value={searchQuery}
                                                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                                                className="w-48 border-white/10 bg-white/5 pl-10 text-white placeholder:text-slate-500"
+                                                                className="w-48 border-white/10 bg-card border-white/5 pl-10 text-white placeholder:text-slate-500"
                                                             />
                                                         </div>
                                                         <select
                                                             value={filterType}
                                                             onChange={(e) => setFilterType(e.target.value as typeof filterType)}
-                                                            className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white"
+                                                            className="rounded-lg border border-white/10 bg-card border-white/5 px-3 py-2 text-sm text-white"
                                                         >
                                                             <option value="all">All</option>
                                                             <option value="withEmail">With Email</option>

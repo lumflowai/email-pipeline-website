@@ -22,11 +22,16 @@ export default function LoginPage() {
         e.preventDefault();
         setIsLoading(true);
 
-        // Mock login - no validation needed
-        setTimeout(() => {
-            login(email || "user@example.com");
-            router.push("/dashboard");
-        }, 500);
+        try {
+            await login(email, password);
+            // Login successful - redirection handled in useAuth or middleware
+            // But valid to push here for immediate feedback if needed, distinct from auth state change listener
+            // Actually useAuth listener handles it.
+        } catch (error) {
+            console.error(error);
+            alert("Login failed. Please check your credentials.");
+            setIsLoading(false);
+        }
     };
 
     return (
