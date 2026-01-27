@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { ToastProvider } from "@/components/ui/toast";
 import { Menu } from "lucide-react";
