@@ -20,12 +20,12 @@ export function ParallaxGallery({ items, className }: ParallaxGalleryProps) {
         offset: ["start end", "end start"],
     });
 
-    const x = useTransform(scrollYProgress, [0, 1], ["10%", "-60%"]);
+    const x = useTransform(scrollYProgress, [0, 1], ["0%", "-10%"]);
 
     return (
         <div ref={containerRef} className={cn("relative overflow-hidden py-20", className)}>
             <motion.div
-                className="flex gap-6"
+                className="flex gap-6 justify-center"
                 style={{ x }}
             >
                 {items.map((item, index) => (

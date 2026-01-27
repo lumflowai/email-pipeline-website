@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { MaskTextReveal } from "@/components/ui/mask-text-reveal";
 import { ParallaxGallery } from "@/components/ui/parallax-gallery";
-import { Users, Megaphone, UserSearch, Rocket } from "lucide-react";
+import { Users, Megaphone, UserSearch, Rocket, Briefcase, Building2, MapPin, LineChart } from "lucide-react";
 
 const useCases = [
     {
@@ -25,6 +25,26 @@ const useCases = [
         title: "Founders",
         description: "Bootstrap your first 100 customers",
         icon: <Rocket className="h-8 w-8 text-green-400" />,
+    },
+    {
+        title: "Consultants",
+        description: "Land high-ticket clients consistently",
+        icon: <Briefcase className="h-8 w-8 text-amber-400" />,
+    },
+    {
+        title: "Real Estate",
+        description: "Find local sellers and buyers",
+        icon: <Building2 className="h-8 w-8 text-indigo-400" />,
+    },
+    {
+        title: "Enterprise",
+        description: "Scale outbound with team controls",
+        icon: <MapPin className="h-8 w-8 text-red-400" />,
+    },
+    {
+        title: "SaaS Sales",
+        description: "Fill your demo calendar",
+        icon: <LineChart className="h-8 w-8 text-teal-400" />,
     },
 ];
 

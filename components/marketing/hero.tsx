@@ -141,25 +141,7 @@ export function Hero() {
                     <div className="absolute -bottom-20 left-1/2 h-40 w-3/4 -translate-x-1/2 rounded-full bg-purple-500/20 blur-3xl" />
                 </motion.div>
 
-                {/* Scroll Indicator */}
-                <motion.div
-                    className="absolute bottom-8 left-1/2 -translate-x-1/2"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 2.5 }}
-                >
-                    <motion.div
-                        className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-white/20 p-1"
-                        animate={{ y: [0, 5, 0] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                    >
-                        <motion.div
-                            className="h-2 w-1 rounded-full bg-white/50"
-                            animate={{ opacity: [1, 0.3, 1] }}
-                            transition={{ duration: 1.5, repeat: Infinity }}
-                        />
-                    </motion.div>
-                </motion.div>
+
             </div>
         </AuroraBackground>
     );
