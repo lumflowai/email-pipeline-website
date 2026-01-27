@@ -891,6 +891,11 @@ export default function ScraperPage() {
                                                         </h3>
                                                         <p className="text-slate-400">
                                                             Found {currentScrape.leadsFound.toLocaleString()} leads in {currentScrape.location}
+                                                            {currentScrape.listName && (
+                                                                <span className="ml-1">
+                                                                    • Saved to <span className="font-medium text-purple-400">{currentScrape.listName}</span>
+                                                                </span>
+                                                            )}
                                                         </p>
                                                     </div>
                                                 </div>
