@@ -18,18 +18,13 @@ const faqs = [
             "Yes, you'll connect your Instantly account. We don't send emails directly to keep your sender reputation safe.",
     },
     {
-        question: "How does AI calling work?",
-        answer:
-            "Our AI caller (powered by Bland AI) makes outbound calls using a script you configure. It can qualify leads, answer questions, and book meetings.",
-    },
-    {
         question: "Can I cancel anytime?",
         answer: "Yes, cancel anytime. No long-term contracts.",
     },
     {
         question: "What's included in the free trial?",
         answer:
-            "7-day free trial with 500 leads, 1 email campaign, and 20 AI calls. No credit card required.",
+            "7-day free trial with 500 leads and 1 email campaign. No credit card required.",
     },
 ];
 

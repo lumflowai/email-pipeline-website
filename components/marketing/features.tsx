@@ -30,13 +30,6 @@ const features = [
         learnMore: "#",
     },
     {
-        title: "AI Voice Calling",
-        description: "AI caller that sounds human. Qualifies leads 24/7.",
-        icon: <Mic className="h-7 w-7 text-cyan-400" />,
-        size: "medium",
-        learnMore: "#",
-    },
-    {
         title: "Real-Time Progress",
         description: "Watch your campaigns run live. No more guessing.",
         icon: <BarChart3 className="h-6 w-6 text-green-400" />,
@@ -204,31 +197,28 @@ export function Features() {
                         </FeatureCard>
                     </motion.div>
 
-                    {/* Medium Cards */}
-                    {features.slice(1, 3).map((feature, index) => (
-                        <motion.div
-                            key={feature.title}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.2 + index * 0.1 }}
-                        >
-                            <FeatureCard feature={feature} className="h-full p-6 pb-12">
-                                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-500/10">
-                                    {feature.icon}
-                                </div>
-                                <h3 className="mt-4 text-xl font-bold text-white">
-                                    {feature.title}
-                                </h3>
-                                <p className="mt-2 text-sm text-slate-400">
-                                    {feature.description}
-                                </p>
-                            </FeatureCard>
-                        </motion.div>
-                    ))}
+                    {/* Medium Card - Email */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 }}
+                    >
+                        <FeatureCard feature={features[1]} className="h-full p-6 pb-12">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-500/10">
+                                {features[1].icon}
+                            </div>
+                            <h3 className="mt-4 text-xl font-bold text-white">
+                                {features[1].title}
+                            </h3>
+                            <p className="mt-2 text-sm text-slate-400">
+                                {features[1].description}
+                            </p>
+                        </FeatureCard>
+                    </motion.div>
 
                     {/* Small Cards */}
-                    {features.slice(3, 5).map((feature, index) => (
+                    {features.slice(2, 4).map((feature, index) => (
                         <motion.div
                             key={feature.title}
                             initial={{ opacity: 0, y: 20 }}
@@ -258,16 +248,16 @@ export function Features() {
                         viewport={{ once: true }}
                         transition={{ delay: 0.6 }}
                     >
-                        <FeatureCard feature={features[5]} className="h-full p-6 pb-12">
+                        <FeatureCard feature={features[4]} className="h-full p-6 pb-12">
                             <div className="flex items-start gap-4">
                                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/10">
-                                    {features[5].icon}
+                                    {features[4].icon}
                                 </div>
                                 <div>
                                     <h3 className="text-xl font-bold text-white">
-                                        {features[5].title}
+                                        {features[4].title}
                                     </h3>
-                                    <p className="mt-2 text-slate-400">{features[5].description}</p>
+                                    <p className="mt-2 text-slate-400">{features[4].description}</p>
                                 </div>
                             </div>
                         </FeatureCard>

@@ -9,7 +9,6 @@ import {
     Home,
     MapPin,
     Mail,
-    Phone,
     CreditCard,
     Settings,
     LogOut,
@@ -20,7 +19,6 @@ const navItems = [
     { href: "/dashboard", label: "Dashboard", icon: Home },
     { href: "/dashboard/scraper", label: "Google Maps Scraper", icon: MapPin },
     { href: "/dashboard/email", label: "Email Campaigns", icon: Mail },
-    { href: "/dashboard/calling", label: "AI Calling", icon: Phone },
     { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
     { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];

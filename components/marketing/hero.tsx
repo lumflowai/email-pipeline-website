@@ -46,14 +46,13 @@ export function Hero() {
                         </span>
                     </motion.h1>
 
-                    {/* Subheadline */}
                     <motion.p
                         className="mx-auto mb-10 max-w-3xl text-lg text-slate-400 sm:text-xl md:text-2xl"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 1.2 }}
                     >
-                        AI-powered lead scraping, email outreach, and voice calling —
+                        AI-powered lead scraping and email outreach —
                         <br className="hidden sm:block" />
                         all automated, all in one platform
                     </motion.p>
@@ -103,7 +102,7 @@ export function Hero() {
                             </div>
 
                             {/* Dashboard Preview */}
-                            <div className="grid gap-4 md:grid-cols-3">
+                            <div className="grid gap-4 md:grid-cols-2">
                                 {/* Stats Cards */}
                                 <div className="rounded-xl bg-gradient-to-br from-purple-500/10 to-purple-500/5 p-4">
                                     <p className="text-sm text-slate-400">Leads Scraped</p>
@@ -114,11 +113,6 @@ export function Hero() {
                                     <p className="text-sm text-slate-400">Emails Sent</p>
                                     <p className="mt-1 text-2xl font-bold text-white">8,234</p>
                                     <p className="mt-1 text-xs text-green-400">92% delivered</p>
-                                </div>
-                                <div className="rounded-xl bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 p-4">
-                                    <p className="text-sm text-slate-400">AI Calls Made</p>
-                                    <p className="mt-1 text-2xl font-bold text-white">1,429</p>
-                                    <p className="mt-1 text-xs text-green-400">68% answered</p>
                                 </div>
                             </div>
 

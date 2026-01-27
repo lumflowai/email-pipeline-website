@@ -51,7 +51,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Overview Cards */}
-            <div className="grid gap-6 md:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2">
                 {/* Current Plan */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -104,29 +104,7 @@ export default function DashboardPage() {
                     </SpotlightCard>
                 </motion.div>
 
-                {/* AI Calls */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                >
-                    <SpotlightCard className="p-6">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500/20 to-cyan-500/10">
-                            <Phone className="h-6 w-6 text-cyan-400" />
-                        </div>
-                        <h3 className="mt-4 text-2xl font-bold text-white">
-                            320{" "}
-                            <span className="text-base font-normal text-slate-500">
-                                / 500
-                            </span>
-                        </h3>
-                        <p className="mt-1 text-sm text-slate-400">AI calls used</p>
-                        <div className="mt-4">
-                            <Progress value={64} className="h-2 bg-slate-800" />
-                        </div>
-                        <p className="mt-2 text-xs text-slate-500">180 calls remaining</p>
-                    </SpotlightCard>
-                </motion.div>
+
             </div>
 
             {/* Recent Activity */}
@@ -213,7 +191,7 @@ export default function DashboardPage() {
                 transition={{ delay: 0.5 }}
             >
                 <h2 className="mb-4 text-xl font-semibold text-white">Quick Actions</h2>
-                <div className="grid gap-4 md:grid-cols-3">
+                <div className="grid gap-4 md:grid-cols-2">
                     {/* Start Scraper */}
                     <Link href="/dashboard/scraper">
                         <Button className="h-auto w-full flex-col items-start gap-3 gradient-primary p-6 text-left hover:scale-[1.02] transition-transform">
@@ -242,19 +220,7 @@ export default function DashboardPage() {
                         </Button>
                     </Link>
 
-                    {/* AI Calls */}
-                    <Link href="/dashboard/calling">
-                        <Button className="h-auto w-full flex-col items-start gap-3 bg-gradient-to-r from-green-600 to-emerald-600 p-6 text-left hover:scale-[1.02] transition-transform">
-                            <PhoneCall className="h-6 w-6" />
-                            <div>
-                                <p className="font-semibold">Schedule AI Calls</p>
-                                <p className="text-sm text-white/70">
-                                    AI-powered voice calling
-                                </p>
-                            </div>
-                            <ArrowRight className="h-4 w-4" />
-                        </Button>
-                    </Link>
+
                 </div>
             </motion.div>
         </div>
