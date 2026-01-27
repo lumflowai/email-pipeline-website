@@ -46,7 +46,7 @@ interface EmailInSequence {
 
 export default function NewCampaignPage() {
     const router = useRouter();
-    const { showToast } = useToast();
+    const { addToast } = useToast();
     const [currentStep, setCurrentStep] = useState(1);
 
     // Step 1: Lead Selection
@@ -118,14 +118,10 @@ export default function NewCampaignPage() {
         // Create campaign (in real app, this would save to DB)
         const newCampaign = createMockCampaign({
             name: campaignName,
-            domain: domain,
-            emailCount: emailSequence.length,
-            leadCount: selectedLeadList?.totalLeads || 0,
         });
 
-        showToast({
-            title: "Campaign Launched! 🚀",
-            description: `${campaignName} is now active and sending emails.`,
+        addToast({
+            message: `Campaign "${campaignName}" launched successfully! 🚀`,
             type: "success",
         });
 

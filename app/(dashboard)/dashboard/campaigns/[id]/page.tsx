@@ -84,7 +84,7 @@ export default function CampaignDetailPage({ params }: CampaignDetailPageProps) 
         const matchesFilter = leadsFilter === "all" || lead.status === leadsFilter;
         const matchesSearch = !leadsSearch ||
             lead.businessName.toLowerCase().includes(leadsSearch.toLowerCase()) ||
-            lead.contactName.toLowerCase().includes(leadsSearch.toLowerCase()) ||
+            lead.contactName?.toLowerCase().includes(leadsSearch.toLowerCase()) ||
             lead.email.toLowerCase().includes(leadsSearch.toLowerCase());
         return matchesFilter && matchesSearch;
     });
