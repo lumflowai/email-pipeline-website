@@ -12,7 +12,6 @@ import {
     CreditCard,
     Settings,
     LogOut,
-    Sparkles,
 } from "lucide-react";
 
 const navItems = [
@@ -109,25 +108,6 @@ export function Sidebar() {
                     })}
                 </ul>
             </nav>
-
-            {/* Upgrade Banner */}
-            <div className="mx-4 mb-4 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 p-4">
-                <div className="flex items-center gap-2">
-                    <Sparkles className="h-5 w-5 text-purple-400" />
-                    <span className="text-sm font-medium text-white">
-                        Upgrade to Enterprise
-                    </span>
-                </div>
-                <p className="mt-1 text-xs text-slate-400">
-                    50,000 leads/month, unlimited everything
-                </p>
-                <Link
-                    href="/dashboard/billing"
-                    className="mt-3 block rounded-lg bg-white/10 py-2 text-center text-xs font-medium text-white transition-colors hover:bg-white/20"
-                >
-                    View Plans
-                </Link>
-            </div>
 
             {/* Logout */}
             <div className="border-t border-white/5 p-4">
