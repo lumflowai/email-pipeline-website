@@ -51,11 +51,17 @@ export function Sidebar() {
             {/* User Profile */}
             <div className="border-b border-white/5 p-4">
                 <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-blue-500 text-sm font-semibold text-white">
+                    <div
+                        className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-blue-500 text-sm font-semibold text-white"
+                        suppressHydrationWarning
+                    >
                         {userInitial}
                     </div>
                     <div className="flex-1 overflow-hidden">
-                        <p className="truncate text-sm font-medium text-white">
+                        <p
+                            className="truncate text-sm font-medium text-white"
+                            suppressHydrationWarning
+                        >
                             {userEmail}
                         </p>
                         <p className="text-xs text-slate-500">Pro Plan</p>
