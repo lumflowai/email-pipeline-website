@@ -15,6 +15,7 @@ import { Confetti } from "@/components/ui/confetti";
 import {
     type Scrape,
     type Lead,
+    type LeadList,
     createScrape,
     generateLeads,
     getSavedScrapes,
@@ -22,6 +23,9 @@ import {
     deleteScrape,
     exportToCSV,
     businessNames,
+    getSavedLeadLists,
+    saveLeadList,
+    updateLeadListTotalLeads,
 } from "@/lib/scraper-utils";
 import {
     MapPin,
@@ -71,6 +75,11 @@ export default function ScraperPage() {
     const [includeEmails, setIncludeEmails] = useState(true);
     const [includeWebsites, setIncludeWebsites] = useState(true);
 
+    // Lead list state
+    const [leadListName, setLeadListName] = useState("");
+    const [isNewList, setIsNewList] = useState(true);
+    const [existingLeadLists, setExistingLeadLists] = useState<LeadList[]>([]);
+
     // Scraper state
     const [currentScrape, setCurrentScrape] = useState<Scrape | null>(null);
     const [isRunning, setIsRunning] = useState(false);
@@ -88,7 +97,7 @@ export default function ScraperPage() {
     const leadsPerPage = 50;
 
     // Validation state
-    const [errors, setErrors] = useState<{ location?: string; keyword?: string }>({});
+    const [errors, setErrors] = useState<{ location?: string; keyword?: string; leadListName?: string }>({});
 
     // Rate limiting
     const [scrapesThisHour, setScrapesThisHour] = useState(0);
@@ -97,9 +106,10 @@ export default function ScraperPage() {
     // Refs
     const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Load past scrapes on mount
+    // Load past scrapes and lead lists on mount
     useEffect(() => {
         setPastScrapes(getSavedScrapes());
+        setExistingLeadLists(getSavedLeadLists());
 
         // Check rate limiting
         const lastHourScrapes = getSavedScrapes().filter((s) => {
@@ -115,7 +125,7 @@ export default function ScraperPage() {
 
     // Validate form
     const validateForm = () => {
-        const newErrors: { location?: string; keyword?: string } = {};
+        const newErrors: { location?: string; keyword?: string; leadListName?: string } = {};
 
         if (!location.trim()) {
             newErrors.location = "Location is required";
@@ -127,6 +137,12 @@ export default function ScraperPage() {
             newErrors.keyword = "Please enter a search keyword";
         } else if (keyword.length > 50) {
             newErrors.keyword = "Keyword must be less than 50 characters";
+        }
+
+        if (!leadListName.trim()) {
+            newErrors.leadListName = "Lead list name is required";
+        } else if (leadListName.length > 50) {
+            newErrors.leadListName = "List name must be less than 50 characters";
         }
 
         setErrors(newErrors);
@@ -141,7 +157,7 @@ export default function ScraperPage() {
             return;
         }
 
-        const scrape = createScrape(location.trim(), keyword.trim(), maxResults[0]);
+        const scrape = createScrape(location.trim(), keyword.trim(), maxResults[0], leadListName.trim());
         scrape.status = "running";
         setCurrentScrape(scrape);
         setIsRunning(true);
@@ -218,6 +234,14 @@ export default function ScraperPage() {
 
                 setCurrentScrape(completedScrape);
                 saveScrape(completedScrape);
+
+                // Save to lead list
+                if (leadListName.trim()) {
+                    saveLeadList(leadListName.trim(), completedScrape.id);
+                    updateLeadListTotalLeads(leadListName.trim());
+                    setExistingLeadLists(getSavedLeadLists());
+                }
+
                 setPastScrapes(getSavedScrapes());
                 setIsRunning(false);
                 setShowConfetti(true);
@@ -244,6 +268,8 @@ export default function ScraperPage() {
         setLocation("");
         setKeyword("");
         setMaxResults([500]);
+        setLeadListName("");
+        setIsNewList(true);
         setActivityFeed([]);
         setSelectedLeads(new Set());
         setSearchQuery("");
@@ -279,7 +305,8 @@ export default function ScraperPage() {
 
     // Export leads
     const handleExport = (leads: Lead[], type: "all" | "selected" | "filtered") => {
-        const filename = `lumflow_leads_${location.replace(/[^a-zA-Z0-9]/g, "_")}_${keyword}_${new Date().toISOString().split("T")[0]}.csv`;
+        const listNamePart = leadListName ? `${leadListName.replace(/[^a-zA-Z0-9]/g, "_")}_` : "";
+        const filename = `lumflow_${listNamePart}leads_${location.replace(/[^a-zA-Z0-9]/g, "_")}_${keyword}_${new Date().toISOString().split("T")[0]}.csv`;
         exportToCSV(leads, filename);
     };
 
@@ -478,6 +505,94 @@ export default function ScraperPage() {
                                     )}
                                 </div>
 
+                                {/* Lead List Name */}
+                                <div className="space-y-2">
+                                    <Label htmlFor="leadListName" className="text-slate-300">
+                                        Lead List Name
+                                    </Label>
+
+                                    {/* Toggle between Create New and Update Existing */}
+                                    <div className="flex gap-2 mb-3">
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setIsNewList(true);
+                                                setLeadListName("");
+                                            }}
+                                            className={cn(
+                                                "flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                                                isNewList
+                                                    ? "bg-purple-500/20 text-purple-300 border border-purple-500/50"
+                                                    : "bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10"
+                                            )}
+                                            disabled={isRunning}
+                                        >
+                                            Create New List
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setIsNewList(false)}
+                                            className={cn(
+                                                "flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                                                !isNewList
+                                                    ? "bg-purple-500/20 text-purple-300 border border-purple-500/50"
+                                                    : "bg-white/5 text-slate-400 border border-white/10 hover:bg-white/10"
+                                            )}
+                                            disabled={isRunning || existingLeadLists.length === 0}
+                                        >
+                                            Update Existing ({existingLeadLists.length})
+                                        </button>
+                                    </div>
+
+                                    {isNewList ? (
+                                        <Input
+                                            id="leadListName"
+                                            placeholder="e.g., NYC Restaurants"
+                                            value={leadListName}
+                                            onChange={(e) => {
+                                                setLeadListName(e.target.value);
+                                                if (errors.leadListName) setErrors((prev) => ({ ...prev, leadListName: undefined }));
+                                            }}
+                                            className={cn(
+                                                "border-white/10 bg-white/5 text-white placeholder:text-slate-500",
+                                                errors.leadListName && "border-red-500"
+                                            )}
+                                            disabled={isRunning}
+                                        />
+                                    ) : (
+                                        <select
+                                            value={leadListName}
+                                            onChange={(e) => {
+                                                setLeadListName(e.target.value);
+                                                if (errors.leadListName) setErrors((prev) => ({ ...prev, leadListName: undefined }));
+                                            }}
+                                            className={cn(
+                                                "w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white",
+                                                errors.leadListName && "border-red-500"
+                                            )}
+                                            disabled={isRunning}
+                                        >
+                                            <option value="">Select a list...</option>
+                                            {existingLeadLists.map((list) => (
+                                                <option key={list.id} value={list.name}>
+                                                    {list.name} ({list.totalLeads} leads)
+                                                </option>
+                                            ))}
+                                        </select>
+                                    )}
+
+                                    {errors.leadListName ? (
+                                        <p className="text-xs text-red-400">{errors.leadListName}</p>
+                                    ) : (
+                                        <p className="text-xs text-slate-500">
+                                            {isNewList
+                                                ? "Give your lead list a memorable name"
+                                                : "Add leads to an existing list"}
+                                        </p>
+                                    )}
+                                </div>
+
+
                                 {/* Max Results */}
                                 <div className="space-y-4">
                                     <div className="flex items-center justify-between">
@@ -600,7 +715,7 @@ export default function ScraperPage() {
                                             ? "border border-red-500/30 bg-red-500/10 hover:bg-red-500/20"
                                             : "gradient-primary glow-primary hover:scale-[1.02]"
                                     )}
-                                    disabled={(!location || !keyword) && !isRunning}
+                                    disabled={(!location || !keyword || !leadListName) && !isRunning}
                                 >
                                     {isRunning ? (
                                         <span className="flex items-center gap-2 text-red-400">
