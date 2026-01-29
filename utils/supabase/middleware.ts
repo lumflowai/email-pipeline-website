@@ -37,6 +37,7 @@ export async function updateSession(request: NextRequest) {
         data: { user },
     } = await supabase.auth.getUser()
 
+    /*
     if (
         !user &&
         !request.nextUrl.pathname.startsWith('/login') &&
@@ -49,6 +50,7 @@ export async function updateSession(request: NextRequest) {
         url.pathname = '/login'
         return NextResponse.redirect(url)
     }
+    */
 
     // if user is signed in and accesses /login or /signup, redirect to /dashboard
     if (

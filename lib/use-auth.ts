@@ -12,6 +12,21 @@ export function useAuth() {
     const supabase = createClient();
 
     useEffect(() => {
+        // MOCK AUTH IMPLEMENTATION
+        const mockSession = localStorage.getItem("lumflow_mock_session");
+        if (mockSession) {
+            try {
+                const sessionUser = JSON.parse(mockSession);
+                setUser(sessionUser);
+            } catch (e) {
+                console.error("Failed to parse mock session", e);
+                localStorage.removeItem("lumflow_mock_session");
+            }
+        }
+        setIsLoading(false);
+
+        /* 
+        // SUPABASE REAL AUTH DISABLED FOR NOW
         const {
             data: { subscription },
         } = supabase.auth.onAuthStateChange((event, session) => {
@@ -33,46 +48,57 @@ export function useAuth() {
         });
 
         return () => subscription.unsubscribe();
+        */
     }, [router, supabase]);
 
     const login = async (email: string, password?: string) => {
-        if (password) {
-            const { error } = await supabase.auth.signInWithPassword({
-                email,
-                password,
-            });
-            if (error) throw error;
-        } else {
-            const { error } = await supabase.auth.signInWithOtp({
-                email,
-                options: {
-                    emailRedirectTo: `${window.location.origin}/auth/callback`,
-                },
-            });
-            if (error) throw error;
-        }
+        // MOCK LOGIN
+        const mockUser: any = {
+            id: "mock-user-id",
+            aud: "authenticated",
+            role: "authenticated",
+            email: email,
+            email_confirmed_at: new Date().toISOString(),
+            phone: "",
+            confirmed_at: new Date().toISOString(),
+            last_sign_in_at: new Date().toISOString(),
+            app_metadata: {
+                provider: "email",
+                providers: ["email"],
+            },
+            user_metadata: {},
+            identities: [],
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+        };
+
+        localStorage.setItem("lumflow_mock_session", JSON.stringify(mockUser));
+        setUser(mockUser as User);
+
+        // Simulate delay
+        await new Promise(resolve => setTimeout(resolve, 800));
+
+        router.refresh();
+        router.push("/dashboard");
     };
 
     const signup = async (email: string, password?: string) => {
-        if (password) {
-            const { error } = await supabase.auth.signUp({
-                email,
-                password,
-                options: {
-                    emailRedirectTo: `${window.location.origin}/auth/callback`,
-                },
-            });
-            if (error) throw error;
-        } else {
-            // Fallback to magic link signup/login
-            await login(email);
-        }
+        // Reuse login for signup
+        await login(email, password);
     };
 
     const logout = async () => {
+        // MOCK LOGOUT
+        localStorage.removeItem("lumflow_mock_session");
+        setUser(null);
+        router.refresh();
+        router.replace("/");
+
+        /*
         await supabase.auth.signOut();
         router.refresh();
         router.replace("/");
+        */
     };
 
     const getUserEmail = () => {
@@ -89,4 +115,3 @@ export function useAuth() {
         getUserEmail
     };
 }
-
