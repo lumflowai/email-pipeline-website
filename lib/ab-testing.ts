@@ -50,10 +50,16 @@ export interface CreateABTestParams {
 // Supabase Client
 // ====================
 
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+function getSupabaseClient() {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+
+    if (!supabaseUrl || !supabaseKey) {
+        throw new Error('Supabase configuration missing');
+    }
+
+    return createClient(supabaseUrl, supabaseKey);
+}
 
 // ====================
 // A/B Test Creation
@@ -74,6 +80,8 @@ export async function createABTest(params: CreateABTestParams): Promise<ABTestVa
         userId,
         apiKey,
     } = params;
+
+    const supabase = getSupabaseClient();
 
     if (subjects.length < 2 || subjects.length > 3) {
         throw new Error('A/B testing requires 2-3 subject line variants');
@@ -187,6 +195,8 @@ export async function determineWinner(
     parentCampaignId: string,
     apiKey: string
 ): Promise<ABTestResult[]> {
+    const supabase = getSupabaseClient();
+
     // Get all variants for this campaign
     const { data: variants } = await supabase
         .from('ab_test_variants')
@@ -282,6 +292,7 @@ export async function determineWinner(
  * Check if an A/B test is ready for winner determination (24 hours elapsed)
  */
 export async function isABTestReady(parentCampaignId: string): Promise<boolean> {
+    const supabase = getSupabaseClient();
     const { data: campaign } = await supabase
         .from('campaigns')
         .select('created_at')
@@ -304,6 +315,7 @@ export async function getABTestResults(
     parentCampaignId: string,
     apiKey: string
 ): Promise<ABTestResult[]> {
+    const supabase = getSupabaseClient();
     const { data: variants } = await supabase
         .from('ab_test_variants')
         .select('*')
