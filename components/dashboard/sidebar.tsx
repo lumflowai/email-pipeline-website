@@ -10,7 +10,6 @@ import {
     Home,
     MapPin,
     Mail,
-    Globe,
     Settings,
     LogOut,
     Sparkles,
@@ -20,7 +19,6 @@ const navItems = [
     { href: "/dashboard", label: "Dashboard", icon: Home },
     { href: "/dashboard/scraper", label: "Google Maps Scraper", icon: MapPin },
     { href: "/dashboard/campaigns", label: "Email Campaigns", icon: Mail },
-    { href: "/dashboard/domains", label: "Domains", icon: Globe },
     { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
 
