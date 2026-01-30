@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
+import { createSupabaseBrowserClient } from '@/lib/supabase';
 import { InstantlyClient } from '@/lib/instantly';
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -37,6 +37,7 @@ interface QueuedReply {
 }
 
 export default function InboxPage() {
+    const supabase = createSupabaseBrowserClient();
     const [queuedReplies, setQueuedReplies] = useState<QueuedReply[]>([]);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);

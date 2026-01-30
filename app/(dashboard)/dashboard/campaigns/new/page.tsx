@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { createSupabaseBrowserClient } from '@/lib/supabase';
 import {
     generateEmail1Curiosity,
     generateEmail2Pitch,
@@ -66,6 +66,7 @@ interface Domain {
 // ====================
 
 export default function NewCampaignPage() {
+    const supabase = createSupabaseBrowserClient();
     const router = useRouter();
 
     // Step management

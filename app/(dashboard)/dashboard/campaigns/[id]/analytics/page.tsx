@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import { createSupabaseBrowserClient } from '@/lib/supabase';
 import { InstantlyClient } from '@/lib/instantly';
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -22,11 +22,14 @@ import {
 // ====================
 
 interface CampaignStats {
-    total_sent: number;
-    total_opened: number;
-    total_replied: number;
-    total_clicked: number;
-    total_bounced: number;
+    campaign_id: string;
+    sent: number;
+    delivered: number;
+    opened: number;
+    clicked: number;
+    replied: number;
+    bounced: number;
+    unsubscribed: number;
     open_rate: number;
     reply_rate: number;
     click_rate: number;
@@ -37,6 +40,7 @@ interface CampaignStats {
 // ====================
 
 export default function CampaignAnalytics({ params }: { params: { id: string } }) {
+    const supabase = createSupabaseBrowserClient();
     const [stats, setStats] = useState<CampaignStats | null>(null);
     const [campaign, setCampaign] = useState<any>(null);
     const [loading, setLoading] = useState(true);
@@ -118,7 +122,7 @@ export default function CampaignAnalytics({ params }: { params: { id: string } }
         );
     }
 
-    const bounceRate = (stats.total_bounced / (stats.total_sent || 1)) * 100;
+    const bounceRate = (stats.bounced / (stats.sent || 1)) * 100;
     const highBounceRate = bounceRate > 5;
 
     return (
@@ -153,7 +157,7 @@ export default function CampaignAnalytics({ params }: { params: { id: string } }
                                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Sent</p>
                                 <Send className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                             </div>
-                            <p className="text-3xl font-bold">{stats.total_sent.toLocaleString()}</p>
+                            <p className="text-3xl font-bold">{stats.sent.toLocaleString()}</p>
                         </CardContent>
                     </Card>
 
@@ -164,7 +168,7 @@ export default function CampaignAnalytics({ params }: { params: { id: string } }
                                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Opened</p>
                                 <Eye className="w-4 h-4 text-green-600 dark:text-green-400" />
                             </div>
-                            <p className="text-3xl font-bold">{stats.total_opened.toLocaleString()}</p>
+                            <p className="text-3xl font-bold">{stats.opened.toLocaleString()}</p>
                             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-2">
                                 <div
                                     className="bg-green-600 dark:bg-green-400 h-2 rounded-full transition-all"
@@ -184,7 +188,7 @@ export default function CampaignAnalytics({ params }: { params: { id: string } }
                                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Replied</p>
                                 <MessageSquare className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                             </div>
-                            <p className="text-3xl font-bold">{stats.total_replied.toLocaleString()}</p>
+                            <p className="text-3xl font-bold">{stats.replied.toLocaleString()}</p>
                             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-2">
                                 <div
                                     className="bg-purple-600 dark:bg-purple-400 h-2 rounded-full transition-all"
@@ -213,7 +217,7 @@ export default function CampaignAnalytics({ params }: { params: { id: string } }
                                         }`}
                                 />
                             </div>
-                            <p className="text-3xl font-bold">{stats.total_bounced.toLocaleString()}</p>
+                            <p className="text-3xl font-bold">{stats.bounced.toLocaleString()}</p>
                             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-2">
                                 <div
                                     className={`h-2 rounded-full transition-all ${highBounceRate ? 'bg-red-600 dark:bg-red-400' : 'bg-gray-400'
@@ -248,13 +252,13 @@ export default function CampaignAnalytics({ params }: { params: { id: string } }
                         <div className="grid grid-cols-3 gap-6">
                             <div className="text-center">
                                 <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-                                    {stats.total_replied || 0}
+                                    {stats.replied || 0}
                                 </p>
                                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Total Replies</p>
                             </div>
                             <div className="text-center">
                                 <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                                    {Math.round((stats.total_replied || 0) * 0.7)} {/* Estimated auto-sent */}
+                                    {Math.round((stats.replied || 0) * 0.7)} {/* Estimated auto-sent */}
                                 </p>
                                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Auto-Sent</p>
                                 <Badge variant="outline" className="mt-1">
@@ -263,7 +267,7 @@ export default function CampaignAnalytics({ params }: { params: { id: string } }
                             </div>
                             <div className="text-center">
                                 <p className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
-                                    {Math.round((stats.total_replied || 0) * 0.3)} {/* Estimated queued */}
+                                    {Math.round((stats.replied || 0) * 0.3)} {/* Estimated queued */}
                                 </p>
                                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Queued for Review</p>
                             </div>

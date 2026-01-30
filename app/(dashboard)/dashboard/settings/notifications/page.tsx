@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
+import { createSupabaseBrowserClient } from '@/lib/supabase';
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,6 +28,7 @@ interface NotificationSettings {
 
 
 export default function NotificationSettingsPage() {
+    const supabase = createSupabaseBrowserClient();
     const [settings, setSettings] = useState<NotificationSettings>({
         user_id: '',
         email_notifications: true,
