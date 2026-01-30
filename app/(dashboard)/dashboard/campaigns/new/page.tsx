@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase';
 import {
     generateEmail1Curiosity,
     generateEmail2Pitch,
@@ -60,15 +60,6 @@ interface Domain {
     domain: string;
     status: string;
 }
-
-// ====================
-// Supabase Client
-// ====================
-
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 // ====================
 // Component

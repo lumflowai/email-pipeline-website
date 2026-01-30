@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase';
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,12 +24,8 @@ interface NotificationSettings {
     email_notifications: boolean;
     notify_on_every_reply: boolean;
     notify_on_booking_intent: boolean;
-}
+};
 
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 export default function NotificationSettingsPage() {
     const [settings, setSettings] = useState<NotificationSettings>({
@@ -360,8 +356,8 @@ export default function NotificationSettingsPage() {
                             <div
                                 key={pref.key}
                                 className={`flex items-center justify-between p-3 rounded-lg ${pref.highlight
-                                        ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
-                                        : 'bg-gray-50 dark:bg-gray-800'
+                                    ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'
+                                    : 'bg-gray-50 dark:bg-gray-800'
                                     }`}
                             >
                                 <div>
@@ -373,8 +369,8 @@ export default function NotificationSettingsPage() {
                                     </p>
                                     <p
                                         className={`text-sm ${pref.highlight
-                                                ? 'text-green-700 dark:text-green-300'
-                                                : 'text-gray-600 dark:text-gray-400'
+                                            ? 'text-green-700 dark:text-green-300'
+                                            : 'text-gray-600 dark:text-gray-400'
                                             }`}
                                     >
                                         {pref.description}
@@ -391,8 +387,8 @@ export default function NotificationSettingsPage() {
                                     />
                                     <div
                                         className={`w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 ${pref.highlight
-                                                ? 'peer-focus:ring-green-200 dark:peer-focus:ring-green-800 peer-checked:bg-green-600'
-                                                : 'peer-focus:ring-primary/20 dark:peer-focus:ring-primary/40 peer-checked:bg-primary'
+                                            ? 'peer-focus:ring-green-200 dark:peer-focus:ring-green-800 peer-checked:bg-green-600'
+                                            : 'peer-focus:ring-primary/20 dark:peer-focus:ring-primary/40 peer-checked:bg-primary'
                                             }`}
                                     ></div>
                                 </label>

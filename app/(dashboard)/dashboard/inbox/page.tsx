@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase';
 import { InstantlyClient } from '@/lib/instantly';
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -35,11 +35,6 @@ interface QueuedReply {
         instantly_campaign_id: string;
     };
 }
-
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 export default function InboxPage() {
     const [queuedReplies, setQueuedReplies] = useState<QueuedReply[]>([]);
@@ -100,11 +95,11 @@ export default function InboxPage() {
             const instantly = new InstantlyClient(connection.api_key);
             const replyText = editedReplies[reply.id] || reply.ai_draft_reply;
 
-            await instantly.sendReply(
-                reply.campaigns.instantly_campaign_id,
-                reply.leads.email,
-                replyText
-            );
+            await instantly.sendReply({
+                campaign_id: reply.campaigns.instantly_campaign_id,
+                lead_email: reply.leads.email,
+                reply_body: replyText,
+            });
 
             await supabase
                 .from('ai_reply_queue')
@@ -293,8 +288,8 @@ export default function InboxPage() {
                                         disabled={!isEditing || isProcessing}
                                         rows={5}
                                         className={`w-full p-3 border dark:border-gray-700 rounded-md font-mono text-sm ${isEditing
-                                                ? 'bg-white dark:bg-gray-800'
-                                                : 'bg-gray-50 dark:bg-gray-900'
+                                            ? 'bg-white dark:bg-gray-800'
+                                            : 'bg-gray-50 dark:bg-gray-900'
                                             } transition-colors`}
                                     />
                                     {isEditing && (
