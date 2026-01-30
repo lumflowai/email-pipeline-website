@@ -7,10 +7,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { determineWinner, isABTestReady } from '@/lib/ab-testing';
 
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getSupabaseClient() {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+        throw new Error('Supabase configuration missing');
+    }
+
+    return createClient(supabaseUrl, supabaseKey);
+}
 
 export async function POST(req: NextRequest) {
     try {
@@ -21,6 +27,7 @@ export async function POST(req: NextRequest) {
         }
 
         // Get campaign from database
+        const supabase = getSupabaseClient();
         const { data: campaign } = await supabase
             .from('campaigns')
             .select(`
@@ -85,6 +92,7 @@ export async function GET(req: NextRequest) {
         }
 
         // Get campaign
+        const supabase = getSupabaseClient();
         const { data: campaign } = await supabase
             .from('campaigns')
             .select(`

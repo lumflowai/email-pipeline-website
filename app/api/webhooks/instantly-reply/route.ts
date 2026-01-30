@@ -32,10 +32,16 @@ interface NotificationPayload {
 // Supabase Client
 // ====================
 
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY! // Use service role for server-side operations
-);
+function getSupabaseClient() {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+        throw new Error('Supabase configuration missing');
+    }
+
+    return createClient(supabaseUrl, supabaseKey);
+}
 
 // ====================
 // Webhook Handler
@@ -43,6 +49,7 @@ const supabase = createClient(
 
 export async function POST(request: Request) {
     try {
+        const supabase = getSupabaseClient();
         const webhook: InstantlyWebhook = await request.json();
 
         // Validate webhook payload
@@ -270,6 +277,7 @@ async function sendNotification(
     notification: NotificationPayload
 ): Promise<void> {
     try {
+        const supabase = getSupabaseClient();
         // Get user's notification settings
         const { data: settings } = await supabase
             .from('notification_settings')
